@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const jwtPassword = 'secret';
-
+const zod = require("zod")
 
 /**
  * Generates a JWT for a given username and password.
@@ -13,8 +13,24 @@ const jwtPassword = 'secret';
  *                        Returns null if the username is not a valid email or
  *                        the password does not meet the length requirement.
  */
+
+
+const emailSchema = zod.string().email();
+const password = zod.string().min(6);
+
 function signJwt(username, password) {
     // Your code here
+    const usernameResponse = emailSchema.safeParse(username);
+    const passwordResponse = passwordResponse.safeParse(password);
+
+    if (!usernameResponse.success || !passwordResponse.success) {
+        return null;
+    }
+
+    const signature = jwt.sign({ username }, jwtPassword);
+    console.log(signature);
+
+    return signature;
 }
 
 /**
@@ -25,10 +41,18 @@ function signJwt(username, password) {
  *                    Returns false if the token is invalid, expired, or not verified
  *                    using the secret key.
  */
-function verifyJwt(token) {
-    // Your code here
-}
 
+
+//its a weired function its panic if wrong token given - try and catch needed 
+function verifyJwt(token) {
+    let ans = true;
+    try {
+        jwt.verify(token, jwtPassword);
+    } catch (e) {
+        ans = false;
+    }
+    return ans;
+}
 /**
  * Decodes a JWT to reveal its payload without verifying its authenticity.
  *
@@ -36,14 +60,23 @@ function verifyJwt(token) {
  * @returns {object|false} The decoded payload of the JWT if the token is a valid JWT format.
  *                         Returns false if the token is not a valid JWT format.
  */
+
+
+//jwt.decode return either null or the decoded string
 function decodeJwt(token) {
     // Your code here
+    const decoded = jwt.decode(token);
+    if (decoded) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 
 module.exports = {
-  signJwt,
-  verifyJwt,
-  decodeJwt,
-  jwtPassword,
+    signJwt,
+    verifyJwt,
+    decodeJwt,
 };

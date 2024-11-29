@@ -1,21 +1,15 @@
-
-// http://localhost:3000/email-validation
-
-
-/*
-email : string => email
-password  :  attest 8 digits 
-country  : "IN","USA"
-*/
+// zod -- schema validation
+//npm install zod
+// http://localhost:3000/health-checkup
 
 const express = require("express");
 const zod = require("zod");
 const app = express();
 
-const schema = zod.array(zod.number()); 
+const schema = zod.array(zod.number());  // Schema should be lowercase 's'
 app.use(express.json());
 
-app.post("/email-validation", function (req, res) {
+app.post("/health-checkup", function (req, res) {
     //kidneys = [1,2]
     const kidneys = req.body.kidneys;
     
