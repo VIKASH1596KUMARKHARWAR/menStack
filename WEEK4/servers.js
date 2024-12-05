@@ -38,7 +38,29 @@ app.get("/todo", (req, res) => {
     todo
   })
 })
+// Route to fetch all todos
+app.get("/all-todos", (req, res) => {
+  res.json({ todos });
+});
 
+
+/* 
+combined routes of the two
+app.get("/todo", (req, res) => {
+  if (!req.query.id) {
+    // If no `id` is provided, return all todos
+    return res.json({ todos });
+  }
+
+  // If `id` is provided, return the specific todo
+  const todo = todos.find(t => t.id === Number(req.query.id));
+  if (todo) {
+    res.json({ todo });
+  } else {
+    res.status(404).json({ error: "Todo not found" });
+  }
+});
+*/
 app.get("/todos", (req, res) => {
   const randomTodos = [];
   for (let i = 0; i < 5; i++) {
